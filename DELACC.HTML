@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>منصِت – حذف الحساب | Manset – Account Deletion</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-alt: #020617;
+      --card-bg: rgba(15,23,42,0.95);
+      --accent: #22c55e;
+      --accent-soft: rgba(34,197,94,0.16);
+      --accent-strong: #4ade80;
+      --danger: #f97373;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: rgba(148,163,184,0.45);
+      --glow: 0 0 25px rgba(34,197,94,0.55);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, #0b1120 0, #020617 45%, #000 100%),
+        radial-gradient(circle at 120% 120%, rgba(34,197,94,0.15) 0, transparent 60%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1150px;
+      padding: 24px 16px;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 18px;
+      background:
+        conic-gradient(from 210deg, #22c55e, #4ade80, #22c55e, #16a34a, #22c55e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #022c22;
+      font-weight: 800;
+      font-size: 1.25rem;
+      box-shadow:
+        0 12px 35px rgba(34,197,94,0.6),
+        0 0 0 1px rgba(15,23,42,0.8);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-text span:first-child {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+
+    .brand-text span:last-child {
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .mode-toggle {
+      display: inline-flex;
+      padding: 4px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15,23,42,0.8);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 10px 30px rgba(15,23,42,0.75);
+      gap: 4px;
+    }
+
+    .mode-btn {
+      border: none;
+      outline: none;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.18s ease;
+    }
+
+    .mode-btn span.icon {
+      font-size: 0.9rem;
+    }
+
+    .mode-btn.active {
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      box-shadow: var(--glow);
+    }
+
+    .card {
+      background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(2,6,23,0.98));
+      border-radius: 22px;
+      border: 1px solid rgba(148,163,184,0.6);
+      box-shadow:
+        0 25px 70px rgba(0,0,0,0.95),
+        0 0 0 1px rgba(15,23,42,0.9);
+      padding: 22px 22px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(34,197,94,0.16), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(45,212,191,0.15), transparent 55%);
+      opacity: 0.85;
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+    }
+
+    .card-inner {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr);
+      gap: 26px;
+      z-index: 1;
+    }
+
+    @media (max-width: 900px) {
+      .card-inner {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    h2 {
+      margin: 10px 0 6px;
+      font-size: 1.02rem;
+    }
+
+    p {
+      margin: 4px 0 10px;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    ul {
+      margin: 3px 0 10px;
+      padding-right: 18px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    li + li {
+      margin-top: 4px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #bbf7d0;
+      border: 1px solid rgba(34,197,94,0.5);
+      font-size: 0.78rem;
+      margin-bottom: 6px;
+    }
+
+    .mini {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .box {
+      border-radius: 15px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15,23,42,0.9);
+      padding: 10px 12px;
+      margin-top: 4px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .box strong {
+      color: var(--text-main);
+    }
+
+    .mail-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .mailto {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+      padding: 9px 11px;
+      border-radius: 13px;
+      background: radial-gradient(circle at 0 0, rgba(34,197,94,0.2), rgba(15,23,42,0.98));
+      border: 1px solid rgba(148,163,184,0.9);
+      color: var(--text-main);
+      text-decoration: none;
+      margin-top: 4px;
+      box-shadow: 0 12px 40px rgba(15,23,42,0.9);
+    }
+
+    .mailto span:first-child {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      overflow-wrap: anywhere;
+    }
+
+    .mailto span:last-child {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 7px;
+    }
+
+    .chip {
+      font-size: 0.76rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.55);
+      color: var(--text-muted);
+      background: rgba(15,23,42,0.8);
+    }
+
+    .timeline {
+      margin-top: 6px;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .step-index {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    .step-body {
+      font-size: 0.87rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .footnote {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    .danger {
+      color: #fecaca;
+    }
+
+    /* panels */
+    .lang-panel {
+      display: none;
+    }
+
+    .lang-panel.active {
+      display: block;
+    }
+
+    .en {
+      direction: ltr;
+      text-align: left;
+    }
+    .en ul {
+      padding-left: 18px;
+      padding-right: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="top-row">
+      <div class="brand">
+        <div class="logo">م</div>
+        <div class="brand-text">
+          <span>منصِت – Manset</span>
+          <span>Voice · AI · Transcription</span>
+        </div>
+      </div>
+      <div class="mode-toggle" aria-label="Language switch">
+        <button class="mode-btn active" data-target="ar-panel">
+          <span class="icon">🌐</span>
+          <span>العربية</span>
+        </button>
+        <button class="mode-btn" data-target="en-panel">
+          <span class="icon">⚡</span>
+          <span>English</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-inner">
+        <!-- لوحة العربية -->
+        <section id="ar-panel" class="lang-panel active" aria-label="Arabic data deletion information">
+          <div class="tag">
+            ✅ متوافق مع سياسة حذف الحساب وبيانات المستخدم في Google Play
+          </div>
+
+          <h2>حذف الحساب والبيانات – تطبيق منصِت</h2>
+          <p>
+            من خلال هذه الصفحة يمكنك طلب حذف حسابك وجميع البيانات المرتبطة بك داخل تطبيق <strong>منصِت</strong>.
+            نلتزم بحماية خصوصيتك ومنحك تحكّمًا كاملاً في بياناتك.
+          </p>
+
+          <h2>ما الذي يتم حذفه؟</h2>
+          <p>عند إتمام عملية حذف الحساب، نقوم بحذف العناصر التالية – بقدر ما تسمح به أنظمتنا وقواعد النسخ الاحتياطي:</p>
+          <ul>
+            <li>هوية حساب Google الذي تستخدمه لتسجيل الدخول في تطبيق منصِت.</li>
+            <li>جميع التسجيلات الصوتية أو ملفات الصوت والفيديو التي تم رفعها أو تسجيلها بغرض التفريغ.</li>
+            <li>النصوص الناتجة عن تفريغ الصوت أو الفيديو بواسطة الذكاء الاصطناعي.</li>
+            <li>أي بيانات أخرى يمكن ربطها بحسابك داخل التطبيق بشكل مباشر.</li>
+          </ul>
+
+          <div class="box">
+            <strong>تنبيه مهم:</strong>
+            بعد حذف الحساب لا يمكن استرجاع أي من البيانات أو الملفات المرتبطة به، لذا ننصحك بالاحتفاظ بنسخة من أي محتوى مهم قبل إرسال طلب الحذف.
+          </div>
+
+          <h2>كيف ترسل طلب حذف الحساب؟</h2>
+          <p>يرجى التواصل معنا عبر البريد الإلكتروني الرسمي المخصّص لطلبات حذف الحساب:</p>
+
+          <div class="mail-label">البريد الإلكتروني لطلبات الحذف:</div>
+          <a class="mailto"
+             href="mailto:hossamamohamed95@gmail.com?subject=طلب%20حذف%20الحساب%20-%20تطبيق%20منصِت">
+            <span>
+              📧
+              <strong>hossamamohamed95@gmail.com</strong>
+            </span>
+            <span>تواصل معنا عبر</span>
+          </a>
+
+          <div class="chips">
+            <div class="chip">استخدم نفس حساب Google المسجّل في التطبيق</div>
+            <div class="chip">اكتب في العنوان: طلب حذف الحساب – تطبيق منصِت</div>
+          </div>
+
+          <h2>البيانات المطلوبة داخل الرسالة</h2>
+          <div class="box">
+            <ul>
+              <li>عنوان الرسالة: <strong>طلب حذف الحساب – تطبيق منصِت</strong></li>
+              <li>البريد الإلكتروني لحساب Google المستخدم داخل التطبيق.</li>
+              <li>تأكيد صريح بأنك ترغب في حذف <strong>الحساب وجميع البيانات المرتبطة به نهائيًا</strong>.</li>
+              <li>اختياريًا: آخر تاريخ تقريبي لاستخدامك للتطبيق للمساعدة في تأكيد الهوية.</li>
+            </ul>
+          </div>
+
+          <h2>مدة تنفيذ طلب الحذف</h2>
+          <div class="timeline">
+            <div class="step">
+              <div class="step-index">1</div>
+              <div class="step-body">
+                نستقبل طلبك عبر البريد الإلكتروني ونقوم بمراجعة البيانات اللازمة للتحقق من ملكية الحساب.
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-index">2</div>
+              <div class="step-body">
+                نبدأ عملية حذف بياناتك من أنظمة الإنتاج وقواعد البيانات، مع جدولة الحذف من أنظمة النسخ الاحتياطي الفعالة عند الإمكان.
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-index">3</div>
+              <div class="step-body">
+                في غضون مدة لا تتجاوز <strong>30 يومًا</strong> من تاريخ استلام طلب مكتمل البيانات، يتم حذف الحساب والبيانات المرتبطة به، ونسعى لإرسال تأكيد بالحذف إلى بريدك الإلكتروني متى كان ذلك ممكنًا.
+              </div>
+            </div>
+          </div>
+
+          <p class="footnote">
+            في حال وجود أي استفسارات إضافية متعلقة بالخصوصية أو طريقة التعامل مع بياناتك في تطبيق منصِت،
+            يمكنك التواصل معنا عبر نفس البريد الإلكتروني وسنقوم بالرد في أقرب وقت متاح.
+          </p>
+        </section>
+
+        <!-- English panel -->
+        <section id="en-panel" class="lang-panel en" aria-label="English data deletion information">
+          <div class="tag">
+            Account &amp; data deletion – Google Play policy compliant
+          </div>
+
+          <h2>Account &amp; Data Deletion – Manset App</h2>
+          <p>
+            This page describes how you can request deletion of your account and all associated data
+            within the <strong>Manset</strong> application. We are committed to protecting your privacy
+            and giving you full control over your data.
+          </p>
+
+          <h2>What will be deleted?</h2>
+          <p>Once your deletion request is completed, we will remove the following items, subject to our system and backup constraints:</p>
+          <ul>
+            <li>The Google account identity you use to sign in to Manset.</li>
+            <li>All audio recordings or audio/video files you uploaded or recorded for transcription.</li>
+            <li>Text generated by our AI transcription from your audio or video content.</li>
+            <li>Any other data that can be directly linked to your account inside the app.</li>
+          </ul>
+
+          <div class="box">
+            <strong>Important:</strong>
+            Once the deletion is executed, your data cannot be restored.
+            Please make sure you save any important content before submitting your deletion request.
+          </div>
+
+          <h2>How to request account deletion</h2>
+          <p>Please contact us using the following email address dedicated to account deletion requests:</p>
+
+          <div class="mail-label">Official email for deletion requests:</div>
+          <a class="mailto"
+             href="mailto:hossamamohamed95@gmail.com?subject=Delete%20my%20account%20-%20Manset%20App">
+            <span>
+              📧
+              <strong>hossamamohamed95@gmail.com</strong>
+            </span>
+            <span>Click to start your deletion request</span>
+          </a>
+
+          <div class="chips">
+            <div class="chip">Use the same Google account used in the app</div>
+            <div class="chip">Subject line: Delete my account – Manset App</div>
+          </div>
+
+          <h2>Suggested email content</h2>
+          <div class="box">
+            <ul>
+              <li>Subject: <strong>Delete my account – Manset App</strong></li>
+              <li>The Google account email you use in the app.</li>
+              <li>A clear confirmation that you want to permanently delete
+                  <strong>your account and all related data</strong>.</li>
+              <li>Optional: an approximate last date of use to help us verify ownership.</li>
+            </ul>
+          </div>
+
+          <h2>Processing timeframe</h2>
+          <div class="timeline">
+            <div class="step">
+              <div class="step-index">1</div>
+              <div class="step-body">
+                We receive your email request and verify the information to confirm account ownership.
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-index">2</div>
+              <div class="step-body">
+                We schedule and execute deletion of your data from our production systems,
+                and from active backup systems where technically feasible.
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-index">3</div>
+              <div class="step-body">
+                Within a maximum of <strong>30 days</strong> from receiving a complete request,
+                your account and related data are deleted. Where possible, we will send a confirmation email
+                to notify you that the process is complete.
+              </div>
+            </div>
+          </div>
+
+          <p class="footnote">
+            For any additional questions regarding privacy or how Manset handles your data,
+            you can contact us at the same email address and we will respond as soon as reasonably possible.
+          </p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll('.mode-btn');
+    const panels = document.querySelectorAll('.lang-panel');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-target');
+
+        buttons.forEach(b => b.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        document.getElementById(target).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
